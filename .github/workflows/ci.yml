@@ -39,9 +39,25 @@ jobs:
         working-directory: ./server
         run: composer install --no-progress --no-interaction --prefer-dist
 
-      - name: Copy env
+      - name: Prepare .env for testing
         working-directory: ./server
-        run: cp .env.example .env
+        run: |
+          cp .env.example .env
+          php -r "file_put_contents('.env', preg_replace('/DB_HOST=.*/', 'DB_HOST=mysql', file_get_contents('.env')));"
+          php -r "file_put_contents('.env', preg_replace('/DB_DATABASE=.*/', 'DB_DATABASE=cloud_notes_test', file_get_contents('.env')));"
+          php -r "file_put_contents('.env', preg_replace('/DB_USERNAME=.*/', 'DB_USERNAME=laravel', file_get_contents('.env')));"
+          php -r "file_put_contents('.env', preg_replace('/DB_PASSWORD=.*/', 'DB_PASSWORD=123', file_get_contents('.env')));"
+
+      - name: Wait for MySQL
+        run: |
+          for i in {1..10}; do
+            if mysqladmin ping -h "127.0.0.1" -u laravel -p123 --silent; then
+              echo "✅ MySQL is ready"
+              break
+            fi
+            echo "⏳ Waiting for MySQL..."
+            sleep 5
+          done
 
       - name: Run Migrations
         working-directory: ./server
