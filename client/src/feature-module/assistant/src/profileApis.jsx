@@ -9,7 +9,7 @@ export function getUserDetails() {
     return new Promise((resolve, reject) => {
         try {
             getRequest(
-                '/api/user/details',
+                '/user/details',
                  {},
                 (response) => {
                     resolve(response);
@@ -28,7 +28,7 @@ export function postResetUserPassword(values) {
     return new Promise((resolve, reject) => {
         try {
             postRequest(
-                '/api/user/reset-password',
+                '/user/reset-password',
                  {},
                 values,
                 (response) => resolve(response)
@@ -44,7 +44,7 @@ export function postEditUserDetails(values) {
     return new Promise((resolve, reject) => {
         try {
             postRequest(
-                '/api/user/edit-details',
+                '/user/edit-details',
                  {},
                 values,
                 (response) => resolve(response)

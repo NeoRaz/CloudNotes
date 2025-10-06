@@ -24,9 +24,6 @@ class SendResetPasswordEmailRequest extends ApiFormRequest
     public function rules()
     {
         return [
-            'client_id' => 'required',
-            'client_secret' => 'required',
-            'grant_type' => 'required',
             'email' => 'required|exists:users,email',
         ];
     }

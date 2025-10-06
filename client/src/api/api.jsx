@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { saveAs } from 'file-saver';
 import toast from 'react-hot-toast';
-import { all_routes } from "../feature-module/router/all_routes";
+import { auth_routes } from "../feature-module/router/all_routes";
 import { aesDecrypt, aesEncrypt } from '../utils/crypto';
 import enErrors from '../languages/enErrors.json';
 
@@ -40,7 +40,7 @@ const notifyError = (message) => {
 
 const logoutUser = () => {
     sessionStorage.clear();
-    window.location.href = all_routes.login;
+    window.location.href = auth_routes.login;
 };
 
 export async function getRequest(
@@ -178,7 +178,7 @@ export async function getRefreshTokenRequest() {
 
     try {
         const response = await api.post(
-            'api/refresh-token',
+            'refresh-token',
             {
                 grant_type: 'refresh_token',
                 client_id: process.env.REACT_APP_CLIENT_ID,

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { all_routes } from "../../router/all_routes";
+import { auth_routes } from "../../router/all_routes";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 import toast from 'react-hot-toast';
 import { postSignUp } from './src/registrationApis';
@@ -12,12 +12,13 @@ import Alert from '../../../components/notification/Alert';
 import PasswordChecklist from '../../../components/PasswordChecklist';
 
 const Register = () => {
-  const routes = all_routes;
+  const routes = auth_routes;
   const navigation = useNavigate();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showRePassword, setShowRePassword] = useState(false);
   const [isErrorICEmail, setIsErrorICEmail] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { Form } = withTypes();
 
@@ -54,12 +55,14 @@ const Register = () => {
   };
 
   const handleSubmitResponse = (response) => {
+      setIsLoading(false);
       localStorage.setItem('registration_id', response.id);
       localStorage.setItem('email', response.email);
       navigation(routes.verifyRegisteration);
   };
 
   const handleSubmitError = (error) => {
+      setIsLoading(false);
       if (error.response?.status === 422) {
           setIsErrorICEmail(true);
       } else {
@@ -74,6 +77,7 @@ const Register = () => {
 
   const handleSubmit = async (values) => {
       try {
+          setIsLoading(true);
           const response = await postSignUp(values);
           handleSubmitResponse(response);
       } catch (error) {
@@ -125,7 +129,7 @@ const Register = () => {
                                   <Alert color="danger" className="d-flex align-items-center">
                                       <p className="mb-0">
                                           Registration failed. Please check if you already have an account. Otherwise, please contact our support team at 
-                                          <a href="mailto:isupport@razedify.com"> isupport@razedify.com</a>
+                                          <a href="mailto:isupport@cloudnotes.com"> isupport@cloudnotes.com</a>
                                       </p>
                                   </Alert>
                               </div>
@@ -228,8 +232,16 @@ const Register = () => {
                             className="btn btn-primary w-100"
                             type="submit"
                             style={{ margin: '10px 0 20px 10px' }}
+                            disabled={isLoading}
                         >
-                            Submit
+                            {isLoading && (
+                                <span
+                                    className="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                ></span>
+                            )}
+                            {isLoading ? "Submitting..." : "Submit"}
                         </Button>{' '}
                         </div>
                         <div className="text-center">

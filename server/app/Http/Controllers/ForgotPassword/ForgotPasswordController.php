@@ -10,8 +10,10 @@ use App\Http\Requests\ForgotPassword\ResetPasswordRequest;
 use App\Http\Requests\ForgotPassword\CheckTokenValidityRequest;
 use App\Http\Requests\ForgotPassword\SendResetPasswordEmailRequest;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 
-class ForgotPasswordController
+class ForgotPasswordController extends Controller
 {
     protected $forgotPasswordService;
 

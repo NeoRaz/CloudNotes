@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'from-email' => env('MAIL_FROM_ADDRESS', 'isupport@razedify.com'),
-    'from-name' => env('MAIL_FROM_NAME', 'RazEdify'),
+    'from-email' => env('MAIL_FROM_ADDRESS', 'isupport@cloudnotes.com'),
+    'from-name' => env('MAIL_FROM_NAME', 'CloudNotes'),
     'view' => [
         'otp' => 'email.otp',
         'reset-password' => 'email.reset-password',

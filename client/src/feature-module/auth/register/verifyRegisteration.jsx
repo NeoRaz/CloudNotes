@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { all_routes } from '../../router/all_routes';
+import { auth_routes } from '../../router/all_routes';
 import { postSubmitVerifyRegistration } from './src/registrationApis';
 import VerificationCode from './verificationCode';
 import { Card, Col, Row, Container } from 'reactstrap';
 
 const VerifyRegistration = () => {
-    const routes = all_routes;
+    const routes = auth_routes;
     const navigate = useNavigate();
     const [pageNumber, setPageNumber] = useState(1);
 

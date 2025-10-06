@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../router/all_routes";
-import { getUserDetails, postResetUserPassword, postEditUserDetails } from "./src/profileApis";
+import {
+  getUserDetails,
+  postResetUserPassword,
+  postEditUserDetails,
+} from "./src/profileApis";
 import toast from "react-hot-toast";
 
 type PasswordField = "newPassword" | "confirmPassword";
 
-const Profile = () => {
+const Profile: React.FC = () => {
   const route = all_routes;
   const [passwordVisibility, setPasswordVisibility] = useState({
     newPassword: false,
@@ -22,15 +26,27 @@ const Profile = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  // Loading states
+  const [pageLoading, setPageLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+
+  // Load user details
   useEffect(() => {
-    // Load user details on mount
-    getUserDetails()
-      .then((res: any) => {
+    const fetchDetails = async () => {
+      setPageLoading(true);
+      try {
+        const res: any = await getUserDetails();
         setFirstName(res.data.user.first_name || "");
         setLastName(res.data.user.last_name || "");
         setEmail(res.data.user.email || "");
-      })
-      .catch(() => toast.error("Failed to load user details"));
+      } catch (err) {
+        toast.error("Failed to load user details");
+      } finally {
+        setPageLoading(false);
+      }
+    };
+
+    fetchDetails();
   }, []);
 
   const togglePasswordVisibility = (field: PasswordField) => {
@@ -40,24 +56,48 @@ const Profile = () => {
     }));
   };
 
-  const handleSaveDetails = () => {
-    postEditUserDetails({ first_name: firstName, last_name: lastName })
-      .then(() => toast.success("Profile updated successfully"))
-      .catch(() => toast.error("Failed to update profile"));
+  const handleSaveDetails = async () => {
+    setActionLoading(true);
+    try {
+      await postEditUserDetails({ first_name: firstName, last_name: lastName });
+      toast.success("Profile updated successfully");
+    } catch (err) {
+      toast.error("Failed to update profile");
+    } finally {
+      setActionLoading(false);
+    }
   };
 
-  const handleChangePassword = () => {
+  const handleChangePassword = async () => {
     if (newPassword !== confirmPassword) {
       toast.error("Passwords do not match");
       return;
     }
-    postResetUserPassword({ new_password: newPassword, new_password_confirmation: confirmPassword })
-      .then(() => toast.success("Password changed successfully"))
-      .catch(() => toast.error("Failed to change password"));
+    setActionLoading(true);
+    try {
+      await postResetUserPassword({
+        new_password: newPassword,
+        new_password_confirmation: confirmPassword,
+      });
+      toast.success("Password changed successfully");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err) {
+      toast.error("Failed to change password");
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   return (
     <div>
+      {/* full page loader */}
+      {pageLoading && (
+        <div id="global-loader">
+          <div className="page-loader"></div>
+        </div>
+      )}
+
       <div className="page-wrapper">
         <div className="content">
           <div className="d-md-flex d-block align-items-center justify-content-between border-bottom pb-3">
@@ -89,7 +129,11 @@ const Profile = () => {
                           type="button"
                           onClick={handleSaveDetails}
                           className="btn btn-primary btn-sm"
+                          disabled={actionLoading}
                         >
+                          {actionLoading && (
+                            <span className="spinner-border spinner-border-sm me-2"></span>
+                          )}
                           Save
                         </button>
                       </div>
@@ -134,7 +178,11 @@ const Profile = () => {
                           type="button"
                           onClick={handleChangePassword}
                           className="btn btn-primary btn-sm"
+                          disabled={actionLoading}
                         >
+                          {actionLoading && (
+                            <span className="spinner-border spinner-border-sm me-2"></span>
+                          )}
                           Save
                         </button>
                       </div>
@@ -143,16 +191,24 @@ const Profile = () => {
                           <label className="form-label">New Password</label>
                           <div className="pass-group d-flex">
                             <input
-                              type={passwordVisibility.newPassword ? "text" : "password"}
+                              type={
+                                passwordVisibility.newPassword
+                                  ? "text"
+                                  : "password"
+                              }
                               className="pass-input form-control"
                               value={newPassword}
                               onChange={(e) => setNewPassword(e.target.value)}
                             />
                             <span
                               className={`ti toggle-passwords ${
-                                passwordVisibility.newPassword ? "ti-eye" : "ti-eye-off"
+                                passwordVisibility.newPassword
+                                  ? "ti-eye"
+                                  : "ti-eye-off"
                               }`}
-                              onClick={() => togglePasswordVisibility("newPassword")}
+                              onClick={() =>
+                                togglePasswordVisibility("newPassword")
+                              }
                             ></span>
                           </div>
                         </div>
@@ -161,16 +217,26 @@ const Profile = () => {
                           <label className="form-label">Confirm Password</label>
                           <div className="pass-group d-flex">
                             <input
-                              type={passwordVisibility.confirmPassword ? "text" : "password"}
+                              type={
+                                passwordVisibility.confirmPassword
+                                  ? "text"
+                                  : "password"
+                              }
                               className="pass-input form-control"
                               value={confirmPassword}
-                              onChange={(e) => setConfirmPassword(e.target.value)}
+                              onChange={(e) =>
+                                setConfirmPassword(e.target.value)
+                              }
                             />
                             <span
                               className={`ti toggle-passwords ${
-                                passwordVisibility.confirmPassword ? "ti-eye" : "ti-eye-off"
+                                passwordVisibility.confirmPassword
+                                  ? "ti-eye"
+                                  : "ti-eye-off"
                               }`}
-                              onClick={() => togglePasswordVisibility("confirmPassword")}
+                              onClick={() =>
+                                togglePasswordVisibility("confirmPassword")
+                              }
                             ></span>
                           </div>
                         </div>

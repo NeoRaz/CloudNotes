@@ -5,7 +5,7 @@ export function postSignUp(values) {
         const requestData = { ...values };
 
         postRequest(
-            'api/v1/register/account-setup',
+            'v1/register/account-setup',
             null,
             requestData,
             (response) => {
@@ -25,7 +25,7 @@ export function postSubmitVerifyRegistration(values) {
         };
 
         postRequest(
-            'api/v1/register/verify-registration',
+            'v1/register/verify-registration',
             null,
             requestData,
             (response) => {

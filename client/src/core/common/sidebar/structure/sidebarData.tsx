@@ -24,20 +24,20 @@ export const userSidebarData = [
       },
     ],
   },
-  {
-    label: "AI",
-    submenuOpen: true,
-    submenuHdr: "Sales",
-    submenu: false,
-    showSubRoute: false,
-    submenuItems: [
-      {
-        label: "Assistant",
-        link: routes.assistant,
-        icon: "ti ti-wand",
-        showSubRoute: false,
-        submenu: false,
-      },
-    ],
-  },
+  // {
+  //   label: "AI",
+  //   submenuOpen: true,
+  //   submenuHdr: "Sales",
+  //   submenu: false,
+  //   showSubRoute: false,
+  //   submenuItems: [
+  //     {
+  //       label: "Assistant",
+  //       link: routes.assistant,
+  //       icon: "ti ti-wand",
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //   ],
+  // },
 ];

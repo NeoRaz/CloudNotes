@@ -1,0 +1,24 @@
+# Ignore vendor since we install inside container
+/vendor
+
+# Ignore Laravel environment files
+.env
+.env.*
+
+# Node / frontend junk if you have Mix/Vite
+/node_modules
+/public/hot
+/public/storage
+/storage/*.key
+
+# Git and IDE/editor configs
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+*.log
+
+# OS junk
+.DS_Store
+Thumbs.db

@@ -24,9 +24,6 @@ class CheckTokenValidityRequest extends ApiFormRequest
     public function rules()
     {
         return [
-            'client_id' => 'required',
-            'client_secret' => 'required',
-            'grant_type' => 'required',
             'token' => 'required',
             'email' => 'required|email|exists:users,email',
         ];

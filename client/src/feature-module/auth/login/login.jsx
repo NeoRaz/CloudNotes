@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { all_routes } from "../../router/all_routes";
+import { auth_routes, all_routes } from "../../router/all_routes";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 import { Field, withTypes } from 'react-final-form';
 import { postLogin } from './src/authApis';
@@ -11,10 +11,12 @@ import Icon from '../../../components/Icon';
 
 const Login = () => {
   const routes = all_routes;
+  const authRoutes = auth_routes;
   const navigation = useNavigate();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isShowPassword, setIsShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);  // ⬅️ track loading state
 
   const showPassword = (e) => {
       e.preventDefault();
@@ -36,7 +38,7 @@ const Login = () => {
 
 const handleLoginResponse = (response) => {
   setIsAuthenticated(true);
-
+  setIsLoading(false);
   sessionStorage.removeItem('login_token');
 
   sessionStorage.setItem('token_type', response.token_type);
@@ -49,11 +51,13 @@ const handleLoginResponse = (response) => {
 
 const handleLoginError = (error) => {
   console.error('Login failed', error);
+  setIsLoading(false);
   // Handle login error here (e.g., show error message)
 }
 
 const handleSubmit = async (values) => {
   try {
+      setIsLoading(true);
       const response = await postLogin(values);
       handleLoginResponse(response);
   } catch (error) {
@@ -143,7 +147,7 @@ const handleSubmit = async (values) => {
                               <p className="ms-1 mb-0 ">Remember Me</p>
                             </div> */}
                             <div className="text-end ">
-                              <Link to={routes.forgotPassword} className="link-danger">
+                              <Link to={authRoutes.forgotPassword} className="link-danger">
                                 Forgot Password?
                               </Link>
                             </div>
@@ -153,14 +157,22 @@ const handleSubmit = async (values) => {
                                 color="primary"
                                 className="btn btn-primary w-100"
                                 type="submit"
+                                disabled={isLoading}
                             >
-                                Sign In
+                              {isLoading && (
+                                <span
+                                  className="spinner-border spinner-border-sm"
+                                  role="status"
+                                  aria-hidden="true"
+                                ></span>
+                              )}
+                              {isLoading ? "Signing In..." : "Sign In"}
                             </Button>{' '}
                           </div>
                           <div className="text-center">
                             <h6 className="fw-normal text-dark mb-0">
                               Don’t have an account?{" "}
-                              <Link to={routes.register} className="hover-a ">
+                              <Link to={authRoutes.register} className="hover-a ">
                                 {" "}
                                 Create Account
                               </Link>

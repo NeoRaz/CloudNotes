@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from "react";
 import { Field, withTypes } from 'react-final-form';
 import { Button } from 'reactstrap';
 import ImageWithBasePath from '../../../core/common/imageWithBasePath';
@@ -13,6 +13,8 @@ const VerificationCode = (props) => {
     isOTPResendSuccess,
     OTPResendCount,
   } = props;
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const onCountdownToZero = () => {
     // Toggle OTP resend states here if necessary.
@@ -29,6 +31,17 @@ const VerificationCode = (props) => {
     return errors;
   };
 
+  const handleFormSubmit = async (values) => {
+    setIsLoading(true);
+    try {
+      await onSubmit(values); // call parent submit
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const { Form } = withTypes();
 
   return (
@@ -39,7 +52,7 @@ const VerificationCode = (props) => {
             <Form
               initialValues={{ code: '' }}
               validate={verifyValidate}
-              onSubmit={onSubmit}
+              onSubmit={handleFormSubmit}
             >
               {({ handleSubmit }) => (
                 <form onSubmit={handleSubmit}>
@@ -105,8 +118,16 @@ const VerificationCode = (props) => {
                             color="primary"
                             className="btn btn-primary w-100"
                             type="submit"
+                            disabled={isLoading}
                           >
-                            Verify
+                            {isLoading && (
+                                <span
+                                    className="spinner-border spinner-border-sm"
+                                    role="status"
+                                    aria-hidden="true"
+                                ></span>
+                            )}
+                            {isLoading ? "Verifying..." : "Verify"}
                           </Button>
                         </div>
 

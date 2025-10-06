@@ -12,9 +12,9 @@ import Register from "../auth/register/register";
 import VerifyRegisteration from "../auth/register/verifyRegisteration";
 import VerificationSuccess from "../auth/register/verificationSuccess";
 import TwoStepVerification from "../auth/twoStepVerification/twoStepVerification";
-import EmailVerification from "../auth/emailVerification/emailVerification";
 import ResetPassword from "../auth/resetPassword/resetPassword";
 import ForgotPassword from "../auth/forgotPassword/forgotPassword";
+import ForgotPasswordSuccess from "../auth/forgotPassword/forgotPasswordSuccess";
 import Error404 from "../pages/error/error-404";
 import Error500 from "../pages/error/error-500";
 import UnderMaintenance from "../pages/underMaintenance";
@@ -68,11 +68,7 @@ export const authRoutes = [
     element: <TwoStepVerification />,
     route: Route,
   },
-  {
-    path: auth_routes.emailVerification,
-    element: <EmailVerification />,
-    route: Route,
-  },
+
   {
     path: auth_routes.register,
     element: <Register />,
@@ -86,6 +82,11 @@ export const authRoutes = [
   {
     path: auth_routes.forgotPassword,
     element: <ForgotPassword />,
+    route: Route,
+  },
+  {
+    path: auth_routes.forgotPasswordSuccess,
+    element: <ForgotPasswordSuccess />,
     route: Route,
   },
   {

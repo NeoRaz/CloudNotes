@@ -2,10 +2,10 @@ import React from 'react';
 import { Button } from 'reactstrap';
 import ImageWithBasePath from '../../../core/common/imageWithBasePath';
 import { useNavigate } from "react-router-dom";
-import { all_routes } from "../../router/all_routes";
+import { auth_routes } from "../../router/all_routes";
 
 const VerificationSuccess = () => {
-  const routes = all_routes;
+  const routes = auth_routes;
   const navigation = useNavigate();
 
   return (
@@ -28,7 +28,7 @@ const VerificationSuccess = () => {
                                 <div className=" mb-4">
                                     <h2 className="mb-2">Verified!</h2>
                                     <p className="mb-0">
-                                        Please proceed and log in.
+                                        Please proceed and login.
                                     </p>
                                 </div>
                                 <Button

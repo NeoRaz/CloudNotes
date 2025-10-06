@@ -24,7 +24,7 @@ export function postLogin(values) {
             };
 
             postLoginRequest(
-                '/api/login',
+                '/login',
                 requestData,
                  (response) => {
                     resolve(response);

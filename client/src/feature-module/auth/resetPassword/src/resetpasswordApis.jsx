@@ -7,24 +7,14 @@ const notifyError = (message) => {
     });
 };
 
-const client_id_secret = {
-    client_id: process.env.REACT_APP_CLIENT_ID,
-    client_secret: process.env.REACT_APP_CLIENT_SECRET,
-}
 
 export function postResetPassword(values) {
     return new Promise((resolve, reject) => {
         try {
-            const requestData = {
-                grant_type: 'password',
-                ...client_id_secret,
-                ...values,
-            };
-
             postRequest(
-                '/api/reset-password',
+                '/reset-password',
                 null,
-                requestData,
+                values,
                 (response) => {
                     resolve(response);
                 }
@@ -37,3 +27,25 @@ export function postResetPassword(values) {
         }
     });
 }
+
+export function checkTokenValidity(values) {
+    return new Promise((resolve, reject) => {
+        try {
+            postRequest(
+                "/check-password-token-validity", 
+                null, 
+                values, 
+                (response) => {
+                    resolve(response);
+                })
+                .catch((error) => {
+                    reject(error);
+            });
+
+        } catch (error) {
+            notifyError(error.message);
+            reject(error);
+        }
+    });
+}
+

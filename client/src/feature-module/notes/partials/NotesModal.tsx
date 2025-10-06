@@ -26,7 +26,7 @@ const NotesModal: React.FC<Props> = ({
     description: "",
     status_id: 1,
     priority_id: 2,
-    due_date: undefined,
+    due_date: "",
     is_pinned: false,
   });
 
@@ -34,24 +34,19 @@ const NotesModal: React.FC<Props> = ({
 
   useEffect(() => {
     if (selectedNote) {
+      console.log("Selected Note:", selectedNote);
+      const formattedDueDate = selectedNote.due_date
+      ? new Date(selectedNote.due_date).toISOString().split("T")[0]
+      : undefined;
+
       setForm({
         id: selectedNote.id,
         title: selectedNote.title || "",
         description: selectedNote.description || "",
         status_id: selectedNote.status_id || 1,
         priority_id: selectedNote.priority_id || 2,
-        due_date: selectedNote.due_date,
+        due_date: formattedDueDate,
         is_pinned: selectedNote.is_pinned || false,
-      });
-    } else {
-      setForm({
-        id: undefined,
-        title: "",
-        description: "",
-        status_id: 1,
-        priority_id: 2,
-        due_date: undefined,
-        is_pinned: false,
       });
     }
     setValidated(false); // reset validation when modal opens

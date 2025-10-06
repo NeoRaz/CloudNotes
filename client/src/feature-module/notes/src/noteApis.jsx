@@ -9,7 +9,7 @@ const notifyError = (message) => {
 export function getNotes() {
   return new Promise((resolve, reject) => {
     try {
-      getRequest('/api/note/all-user-notes', {}, (response) => {
+      getRequest('/note/all-user-notes', {}, (response) => {
         resolve(response);
       }).catch((error) => reject(error));
     } catch (error) {
@@ -23,7 +23,7 @@ export function getNotes() {
 export function getStatuses() {
   return new Promise((resolve, reject) => {
     try {
-      getRequest('/api/utility/all-statuses', {}, (response) => {
+      getRequest('/utility/all-statuses', {}, (response) => {
         resolve(response);
       }).catch((error) => reject(error));
     } catch (error) {
@@ -37,7 +37,7 @@ export function getStatuses() {
 export function getPriorities() {
   return new Promise((resolve, reject) => {
     try {
-      getRequest('/api/utility/all-priorities', {}, (response) => {
+      getRequest('/utility/all-priorities', {}, (response) => {
         resolve(response);
       }).catch((error) => reject(error));
     } catch (error) {
@@ -51,7 +51,7 @@ export function getPriorities() {
 export function postCreateNote(values) {
   return new Promise((resolve, reject) => {
     try {
-      postRequest('/api/note/create', {}, values, (response) => {
+      postRequest('/note/create', {}, values, (response) => {
         resolve(response);
       }).catch((error) => reject(error));
     } catch (error) {
@@ -65,7 +65,7 @@ export function postCreateNote(values) {
 export function postUpdateNote(noteId, values) {
   return new Promise((resolve, reject) => {
     try {
-      postRequest(`/api/note/update/${noteId}`, {}, values, (response) => {
+      postRequest(`/note/update/${noteId}`, {}, values, (response) => {
         resolve(response);
       }).catch((error) => reject(error));
     } catch (error) {
@@ -79,7 +79,7 @@ export function postUpdateNote(noteId, values) {
 export function postDeleteNote(noteId) {
   return new Promise((resolve, reject) => {
     try {
-      postRequest(`/api/note/delete/${noteId}`, {}, {}, (response) => {
+      postRequest(`/note/delete/${noteId}`, {}, {}, (response) => {
         resolve(response);
       }).catch((error) => reject(error));
     } catch (error) {
