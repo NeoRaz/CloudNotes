@@ -1,0 +1,74 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  backend-tests:
+    runs-on: ubuntu-latest
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE: cloud_notes_test
+          MYSQL_USER: laravel
+          MYSQL_PASSWORD: 123
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd "mysqladmin ping -h 127.0.0.1 -uroot -proot"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: 8.2
+          extensions: mbstring, bcmath, pdo_mysql
+          coverage: none
+
+      - name: Install Composer dependencies
+        working-directory: ./server
+        run: composer install --no-progress --no-interaction --prefer-dist
+
+      - name: Copy env
+        working-directory: ./server
+        run: cp .env.example .env
+
+      - name: Run Migrations
+        working-directory: ./server
+        run: php artisan migrate --env=testing --force
+
+      - name: Run Tests
+        working-directory: ./server
+        run: php artisan test
+
+  frontend-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        working-directory: ./client
+        run: npm install
+
+      - name: Run Lint
+        working-directory: ./client
+        run: npm run lint --if-present
+
+      - name: Run Tests
+        working-directory: ./client
+        run: npm test -- --watchAll=false
