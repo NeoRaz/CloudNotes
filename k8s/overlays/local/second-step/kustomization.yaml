@@ -1,0 +1,12 @@
+resources:
+  - ../../../base/second-step
+
+namespace: cloudnotes-local
+
+images:
+  - name: cloudnotes-client
+    newName: cloudnotes-client
+    newTag: latest
+
+patches:
+  - path: patch-ingress-host.yaml

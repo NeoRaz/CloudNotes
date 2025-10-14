@@ -3,7 +3,7 @@ version: "3.9"
 services:
   server:
     build: ./server
-    container_name: laravel_app
+    container_name: cloudnotes-server
     restart: unless-stopped
     volumes:
       - ./server:/var/www/html
@@ -34,10 +34,10 @@ services:
       args:
         - REACT_APP_ENV=docker
         - REACT_APP_API_BASE_URL=http://localhost:8080/api
-        - REACT_APP_CLIENT_ID=9ffae7eb-d82b-4de6-9233-612eb75cc1c3
-        - REACT_APP_CLIENT_SECRET=l0EdjHCNUgUNr8pvTq8GKdD1Cb3XFNxWyQUsVc7J
+        - REACT_APP_CLIENT_ID=9ffae7eb-d82b-4de6-9233-612eb75cc1c3 # Change this to your client ID
+        - REACT_APP_CLIENT_SECRET=l0EdjHCNUgUNr8pvTq8GKdD1Cb3XFNxWyQUsVc7J  # Change this to your client Secret
         - REACT_APP_SECRET_KEY=Clound-Notes-Client
-    container_name: react_app
+    container_name: cloudnotes-client
     restart: unless-stopped
     ports:
       - "3000:80"
