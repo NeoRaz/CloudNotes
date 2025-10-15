@@ -52,8 +52,8 @@ if [ "$REACT_APP_CLIENT_ID" = "PLACE_HOLDER" ] || [ "$REACT_APP_CLIENT_SECRET" =
     fi
 
     # Update the environment file on the host machine
-    sed -i "s|REACT_APP_CLIENT_ID=.*|REACT_APP_CLIENT_ID=$CLIENT_ID|" "$ENV_FILE"
-    sed -i "s|REACT_APP_CLIENT_SECRET=.*|REACT_APP_CLIENT_SECRET=$CLIENT_SECRET|" "$ENV_FILE"
+    sed -i '' "s|REACT_APP_CLIENT_ID=.*|REACT_APP_CLIENT_ID=$CLIENT_ID|" "$ENV_FILE"
+    sed -i '' "s|REACT_APP_CLIENT_SECRET=.*|REACT_APP_CLIENT_SECRET=$CLIENT_SECRET|" "$ENV_FILE"
 
     echo "🔐 Generated CLIENT_ID: $CLIENT_ID"
     echo "🔐 Generated CLIENT_SECRET: $CLIENT_SECRET"
