@@ -1,0 +1,13 @@
+resources:
+  - pvc.yaml
+  - ../../../base/first-step
+
+namespace: cloudnotes-local
+
+images:
+  - name: cloudnotes-server
+    newName: cloudnotes-server
+    newTag: latest
+    
+patches:
+  - path: remove-server-hostpath.yaml

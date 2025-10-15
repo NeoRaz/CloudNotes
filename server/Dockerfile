@@ -25,7 +25,8 @@ RUN apt-get update && apt-get install -y \
     git unzip libpq-dev libzip-dev zip curl netcat-openbsd \
     && docker-php-ext-install pdo pdo_mysql \
     && pecl install redis \
-    && docker-php-ext-enable redis
+    && docker-php-ext-enable redis \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy vendor from composer stage
 COPY --from=vendor /app/vendor ./vendor
@@ -33,8 +34,16 @@ COPY --from=vendor /app/vendor ./vendor
 # Copy application source
 COPY . .
 
+# Add entrypoint script
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
 # Fix Laravel permissions
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
+# Use custom entrypoint that clears caches, migrates DB, etc.
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+
+# Default command
 CMD ["php-fpm"]
