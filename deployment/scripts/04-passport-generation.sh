@@ -5,6 +5,12 @@ ENVIRONMENT=${1:-local}
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 ENV_FILE="$PROJECT_ROOT/deployment/envs/${ENVIRONMENT}.env"
 
+SED_INPLACE="sed -i"
+if [[ "$(uname)" == "Darwin" ]]; then
+  SED_INPLACE="sed -i ''"
+fi
+
+
 if [ ! -f "$ENV_FILE" ]; then
   echo "❌ Environment file not found: $ENV_FILE"
   exit 1
@@ -52,8 +58,8 @@ if [ "$REACT_APP_CLIENT_ID" = "PLACE_HOLDER" ] || [ "$REACT_APP_CLIENT_SECRET" =
     fi
 
     # Update the environment file on the host machine
-    sed -i '' "s|REACT_APP_CLIENT_ID=.*|REACT_APP_CLIENT_ID=$CLIENT_ID|" "$ENV_FILE"
-    sed -i '' "s|REACT_APP_CLIENT_SECRET=.*|REACT_APP_CLIENT_SECRET=$CLIENT_SECRET|" "$ENV_FILE"
+    $SED_INPLACE "s|REACT_APP_CLIENT_ID=.*|REACT_APP_CLIENT_ID=$CLIENT_ID|" "$ENV_FILE"
+    $SED_INPLACE "s|REACT_APP_CLIENT_SECRET=.*|REACT_APP_CLIENT_SECRET=$CLIENT_SECRET|" "$ENV_FILE"
 
     echo "🔐 Generated CLIENT_ID: $CLIENT_ID"
     echo "🔐 Generated CLIENT_SECRET: $CLIENT_SECRET"

@@ -9,6 +9,11 @@ OVERLAY_PATH="$PROJECT_ROOT/k8s/overlays/${ENVIRONMENT}/first-step"
 
 echo "🚀 Starting CloudNotes deployment ($ENVIRONMENT)..."
 
+SED_INPLACE="sed -i"
+if [[ "$(uname)" == "Darwin" ]]; then
+  SED_INPLACE="sed -i ''"
+fi
+
 if [ ! -f "$ENV_FILE" ]; then
   echo "❌ Environment file not found: $ENV_FILE"
   exit 1
@@ -92,7 +97,7 @@ else
 
   # Inject Docker username dynamically into kustomization
   echo "🧩 Injecting DockerHub username into overlay..."
-  sed -i "s|\${DOCKER_USERNAME}|$DOCKER_USERNAME|g" "$OVERLAY_PATH/kustomization.yaml"
+  $SED_INPLACE "s|\${DOCKER_USERNAME}|$DOCKER_USERNAME|g" "$OVERLAY_PATH/kustomization.yaml"
 fi
 
 echo "📦 Applying Kustomize overlay for $ENVIRONMENT..."

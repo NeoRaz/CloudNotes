@@ -746,26 +746,14 @@ const ThemeSettings = () => {
         </div>
         <div className="bg-light-500 p-3">
           <div className="row gx-3">
-            <div className="col-6">
-              <Link
-                onClick={handleReset}
-                to="#"
-                id="resetbutton"
-                className="btn btn-light close-theme w-100"
-              >
-                Reset
-              </Link>
-            </div>
-            <div className="col-6">
-              <Link onClick={buyNow}
-                to="#"
-                target="_blank"
-                className="btn btn-primary w-100"
-                data-bs-dismiss="offcanvas"
-              >
-                Buy Now
-              </Link>
-            </div>
+            <Link
+              onClick={handleReset}
+              to="#"
+              id="resetbutton"
+              className="btn btn-light close-theme w-100"
+            >
+              Reset
+            </Link>
           </div>
         </div>
       </div>
