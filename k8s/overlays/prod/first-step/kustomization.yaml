@@ -6,8 +6,6 @@ namespace: cloudnotes-prod
 
 images:
   - name: cloudnotes-server
-    newName: ${DOCKER_USERNAME}/cloudnotes-server
-    newTag: latest
     
 patches:
   - path: remove-server-hostpath.yaml

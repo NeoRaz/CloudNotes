@@ -5,6 +5,11 @@ ENVIRONMENT=${1:-local}
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 ENV_FILE="$PROJECT_ROOT/deployment/envs/${ENVIRONMENT}.env"
 
+SED_INPLACE="sed -i"
+if [[ "$(uname)" == "Darwin" ]]; then
+  SED_INPLACE="sed -i ''"
+fi
+
 if [ ! -f "$ENV_FILE" ]; then
   echo "❌ Environment file not found: $ENV_FILE"
   exit 1
@@ -36,7 +41,7 @@ echo "✅ Found server pod: $SERVER_POD"
 if [ "$APP_KEY" = "PLACE_HOLDER" ]; then
   # Use kubectl exec on the running pod to generate the key
   APP_KEY=$(kubectl exec -n "$NAMESPACE" "$SERVER_POD" -- sh -c "php /var/www/html/artisan key:generate --show")
-  sed -i "s|APP_KEY=.*|APP_KEY=$APP_KEY|" "$ENV_FILE"
+  $SED_INPLACE "s|APP_KEY=.*|APP_KEY=$APP_KEY|" "$ENV_FILE"
   echo "✅ Generated APP_KEY: $APP_KEY"
 else
   echo "✅ APP_KEY already set."
