@@ -5,7 +5,9 @@ ENVIRONMENT=${1:-local}
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 SERVER_DIR="$PROJECT_ROOT/server"
 ENV_FILE="$PROJECT_ROOT/deployment/envs/${ENVIRONMENT}.env"
-OVERLAY_PATH="$PROJECT_ROOT/k8s/overlays/${ENVIRONMENT}/first-step"
+
+FIRST_STEP_OVERLAY_PATH="$PROJECT_ROOT/k8s/overlays/${ENVIRONMENT}/first-step"
+SECOND_STEP_OVERLAY_PATH="$PROJECT_ROOT/k8s/overlays/${ENVIRONMENT}/second-step"
 
 echo "🚀 Starting CloudNotes deployment ($ENVIRONMENT)..."
 
@@ -71,16 +73,38 @@ kubectl -n "$NAMESPACE" create secret generic cloudnotes-env \
   --from-literal=MAIL_FROM_ADDRESS="$MAIL_FROM_ADDRESS" \
   --from-literal=MAIL_FROM_NAME="$MAIL_FROM_NAME"
 
-# Environment-based logic
+
 if [ "$ENVIRONMENT" == "local" ]; then
   echo "🐳 Setting Docker to Minikube daemon..."
   eval $(minikube docker-env)
 
-  echo "🛠️ Building local Docker image..."
-  docker build -t cloudnotes-server:latest "$SERVER_DIR"
+  # Generate a unique image tag
+  IMAGE_TAG="local-$(date +%s)"
+  echo "🏷️ Using image tag: $IMAGE_TAG"
+
+  echo "🛠️ Building local Docker image: cloudnotes-server:$IMAGE_TAG"
+  docker build -t cloudnotes-server:$IMAGE_TAG "$SERVER_DIR"
+
+  echo "🧩 Patching Kustomize overlay (first-step) with new server image..."
+  (cd "$FIRST_STEP_OVERLAY_PATH" && kustomize edit set image cloudnotes-server=cloudnotes-server:$IMAGE_TAG)
+  
+  echo "🧩 Patching Kustomize overlay (second-step) with new server image..."
+  (cd "$SECOND_STEP_OVERLAY_PATH" && kustomize edit set image cloudnotes-server=cloudnotes-server:$IMAGE_TAG)
 
 else
-  echo "☁️ Using Docker Hub image for production..."
+  echo "☁️ Building and pushing Docker Hub image for production..."
+
+  # Generate a unique image tag
+  IMAGE_TAG=$(git rev-parse --short HEAD 2>/dev/null)
+  if [ -z "$IMAGE_TAG" ]; then
+    echo "❌ Could not get git hash. Make sure this is a git repository."
+    exit 1
+  fi
+  echo "🏷️ Using image tag: $IMAGE_TAG"
+
+  # Build image on the host daemon
+  echo "🛠️ Building server Docker image: cloudnotes-server:$IMAGE_TAG"
+  docker build -t cloudnotes-server:$IMAGE_TAG "$SERVER_DIR"
 
   # Ensure Docker credentials exist
   if [ -z "$DOCKER_USERNAME" ] || [ -z "$DOCKER_PASSWORD" ] || [ -z "$DOCKER_EMAIL" ]; then
@@ -95,13 +119,23 @@ else
     --docker-password="$DOCKER_PASSWORD" \
     --docker-email="$DOCKER_EMAIL"
 
-  # Inject Docker username dynamically into kustomization
-  echo "🧩 Injecting DockerHub username into overlay..."
-  $SED_INPLACE "s|\${DOCKER_USERNAME}|$DOCKER_USERNAME|g" "$OVERLAY_PATH/kustomization.yaml"
+  echo "📤 Tagging and pushing server image to Docker Hub..."
+  docker tag cloudnotes-server:$IMAGE_TAG "$DOCKER_USERNAME/cloudnotes-server:$IMAGE_TAG"
+  docker tag cloudnotes-server:$IMAGE_TAG "$DOCKER_USERNAME/cloudnotes-server:latest"
+  docker push "$DOCKER_USERNAME/cloudnotes-server:$IMAGE_TAG"
+  docker push "$DOCKER_USERNAME/cloudnotes-server:latest"
+
+  echo "🧩 Patching Kustomize overlay (first-step) with new server image..."
+  (cd "$FIRST_STEP_OVERLAY_PATH" && \
+    kustomize edit set image cloudnotes-server="$DOCKER_USERNAME/cloudnotes-server:$IMAGE_TAG")
+
+  echo "🧩 Patching Kustomize overlay (second-step) with new server image..."
+  (cd "$SECOND_STEP_OVERLAY_PATH" && \
+    kustomize edit set image cloudnotes-server="$DOCKER_USERNAME/cloudnotes-server:$IMAGE_TAG")
 fi
 
 echo "📦 Applying Kustomize overlay for $ENVIRONMENT..."
-kubectl apply -k "$OVERLAY_PATH"
+kubectl apply -k "$FIRST_STEP_OVERLAY_PATH"
 
 echo "⏳ Waiting for dependencies to be ready..."
 kubectl wait --for=condition=ready pod -l app=mysql -n "$NAMESPACE" --timeout=180s || true

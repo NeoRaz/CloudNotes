@@ -1,13 +1,15 @@
 resources:
-  - pvc.yaml
-  - ../../../base/first-step
+- pvc.yaml
+- ../../../base/first-step
 
 namespace: cloudnotes-local
 
 images:
-  - name: cloudnotes-server
-    newName: cloudnotes-server
-    newTag: latest
+- name: cloudnotes-server
+  newName: cloudnotes-server
+  newTag: ffb6e83
     
 patches:
-  - path: remove-server-hostpath.yaml
+- path: remove-server-hostpath.yaml
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
