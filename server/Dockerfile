@@ -34,6 +34,9 @@ COPY --from=vendor /app/vendor ./vendor
 # Copy application source
 COPY . .
 
+# 🧹 Remove cached bootstrap files
+RUN rm -rf bootstrap/cache/*.php
+
 # Add entrypoint script
 COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
