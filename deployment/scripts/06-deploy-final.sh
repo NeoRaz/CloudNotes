@@ -20,7 +20,7 @@ echo "📁 Applying final overlay for client, nginx, queue worker, and ingress..
 kubectl apply -k "$OVERLAY_PATH"
 
 echo "⏳ Waiting for deployments..."
-kubectl wait --for=condition=available --timeout=180s deployment --all -n "$NAMESPACE" || true
+kubectl wait --for=condition=available --timeout=300s deployment --all -n "$NAMESPACE" || exit 1
 
 echo "✅ All deployments applied!"
 kubectl get pods -n "$NAMESPACE"
