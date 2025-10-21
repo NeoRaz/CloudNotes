@@ -8,6 +8,5 @@ images:
   - name: cloudnotes-server
     
 patches:
-  - path: remove-server-hostpath.yaml
   - path: patch-image-pull-secret.yaml
 
