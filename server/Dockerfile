@@ -22,7 +22,7 @@ WORKDIR /var/www/html
 
 # Install PHP extensions and utilities
 RUN apt-get update && apt-get install -y \
-    git unzip libpq-dev libzip-dev zip curl netcat-openbsd \
+    git unzip libpq-dev libzip-dev zip curl netcat-openbsd redis-tools \
     && docker-php-ext-install pdo pdo_mysql \
     && pecl install redis \
     && docker-php-ext-enable redis \
