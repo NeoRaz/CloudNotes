@@ -40,7 +40,7 @@ echo "✅ Found server pod: $SERVER_POD"
 # 3️⃣ Generate APP_KEY if PLACE_HOLDER
 if [ "$APP_KEY" = "PLACE_HOLDER" ]; then
   # Use kubectl exec on the running pod to generate the key
-  APP_KEY=$(kubectl exec -n "$NAMESPACE" "$SERVER_POD" -- sh -c "php /var/www/html/artisan key:generate --show")
+  APP_KEY=$(kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- sh -c "php /var/www/html/artisan key:generate --show")
   $SED_INPLACE "s|APP_KEY=.*|APP_KEY=$APP_KEY|" "$ENV_FILE"
   echo "✅ Generated APP_KEY: $APP_KEY"
 else
