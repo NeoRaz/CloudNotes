@@ -109,7 +109,7 @@ jobs:
           chmod +x ./deployment/scripts/deploy-first-step.sh
           ./deployment/scripts/deploy-first-step.sh $ENVIRONMENT
 
-      - name: 🗃️ Run migrations and seed database (CORRECTED)
+      - name: 🗃️ Run migrations and seed database
         run: |
           ENV_FILE="./deployment/envs/${ENVIRONMENT}.env"
           source "$ENV_FILE"
