@@ -118,7 +118,6 @@ jobs:
           kubectl exec -n cloudnotes-prod deploy/server -- php artisan cache:clear
           kubectl exec -n cloudnotes-prod deploy/server -- php artisan config:cache
 
-          kubectl rollout status deployment/server -n "$NAMESPACE" --timeout=300s
           kubectl exec -n "$NAMESPACE" deploy/server -- php artisan migrate --seed --force
 
       - name: 💻 Build and deploy frontend (second step)
