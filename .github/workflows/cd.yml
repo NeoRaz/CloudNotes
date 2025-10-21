@@ -109,14 +109,18 @@ jobs:
           chmod +x ./deployment/scripts/deploy-first-step.sh
           ./deployment/scripts/deploy-first-step.sh $ENVIRONMENT
 
-      - name: 🗃️ Run migrations and seed database
+      - name: 🗃️ Run migrations and seed database (CORRECTED)
         run: |
           ENV_FILE="./deployment/envs/${ENVIRONMENT}.env"
           source "$ENV_FILE"
 
-          echo "⏳ Waiting for server pod to be ready..."
-          SERVER_POD=$(kubectl get pods -n "$NAMESPACE" -l app=server -o jsonpath="{.items[0].metadata.name}")
-          kubectl wait --for=condition=ready pod "$SERVER_POD" -n "$NAMESPACE" --timeout=300s
+          echo "⏳ Waiting for server deployment to be available..."
+          kubectl wait --for=condition=available deployment/server -n "$NAMESPACE" --timeout=300s
+
+          echo "⏳ Finding the new ready server pod..."
+          SERVER_POD=$(kubectl get pods -n "$NAMESPACE" -l app=server --field-selector=status.phase=Running -o jsonpath='{.items[0].metadata.name}')
+
+          echo "✅ Found server pod: $SERVER_POD"
 
           echo "⏳ Checking MySQL connectivity..."
           until kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php -r "new PDO('mysql:host=$DB_HOST;dbname=$DB_DATABASE', '$DB_USERNAME', '$DB_PASSWORD');"; do
