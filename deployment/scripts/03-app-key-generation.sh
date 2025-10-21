@@ -28,7 +28,7 @@ fi
 
 # 1️⃣ Wait for server deployment
 echo "⏳ Waiting for server deployment to be available..."
-kubectl wait --for=condition=available deployment/server -n "$NAMESPACE" --timeout=300s
+kubectl wait --for=condition=available deployment/server -n "$NAMESPACE" --timeout=300s || exit 1
 
 # 2️⃣ Get server pod name
 echo "⏳ Waiting for server pod to be created..."
@@ -96,6 +96,6 @@ kubectl -n "$NAMESPACE" create secret generic cloudnotes-env \
 echo "🔄 Restarting server deployment to apply new environment variables..."
 kubectl rollout restart deployment/server -n "$NAMESPACE"
 # Wait for the restart to complete and a new pod to be ready
-kubectl wait --for=condition=available deployment/server -n "$NAMESPACE" --timeout=180s
+kubectl wait --for=condition=available deployment/server -n "$NAMESPACE" --timeout=300s || exit 1
 
 echo "✅ ENV file updated with Laravel APP_KEY."

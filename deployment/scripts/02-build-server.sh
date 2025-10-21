@@ -138,7 +138,7 @@ echo "📦 Applying Kustomize overlay for $ENVIRONMENT..."
 kubectl apply -k "$FIRST_STEP_OVERLAY_PATH"
 
 echo "⏳ Waiting for dependencies to be ready..."
-kubectl wait --for=condition=ready pod -l app=mysql -n "$NAMESPACE" --timeout=180s || true
-kubectl wait --for=condition=ready pod -l app=redis -n "$NAMESPACE" --timeout=180s || true
+kubectl wait --for=condition=ready pod -l app=mysql -n "$NAMESPACE" --timeout=300s || exit 1
+kubectl wait --for=condition=ready pod -l app=redis -n "$NAMESPACE" --timeout=300s || exit 1
 
 echo "✅ Deployment complete for $ENVIRONMENT."
