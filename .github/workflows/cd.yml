@@ -111,12 +111,15 @@ jobs:
 
       - name: 🗃️ Run migrations and seed database
         run: |
+          ENV_FILE="./deployment/envs/${ENVIRONMENT}.env"
+          source "$ENV_FILE"
+
           echo "✅ Running Laravel Artisan commands..."
-          kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan config:clear
-          kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan route:clear
-          kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan migrate --seed --force
-          kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan cache:clear
-          kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan config:cache
+          kubectl exec -n "$NAMESPACE" deployment/server -c php-fpm -- php artisan config:clear
+          kubectl exec -n "$NAMESPACE" deployment/server -c php-fpm -- php artisan route:clear
+          kubectl exec -n "$NAMESPACE" deployment/server -c php-fpm -- php artisan migrate --seed --force
+          kubectl exec -n "$NAMESPACE" deployment/server -c php-fpm -- php artisan cache:clear
+          kubectl exec -n "$NAMESPACE" deployment/server -c php-fpm -- php artisan config:cache
 
       - name: 💻 Build and deploy frontend (second step)
         run: |
