@@ -35,7 +35,7 @@ echo "🔐 Creating environment secret..."
 kubectl -n "$NAMESPACE" delete secret cloudnotes-env --ignore-not-found
 kubectl -n "$NAMESPACE" create secret generic cloudnotes-env \
   --from-literal=APP_NAME="CloudNotesServer" \
-  -from-literal=APP_KEY="$APP_KEY" \
+  --from-literal=APP_KEY="$APP_KEY" \
   --from-literal=APP_ENV="$APP_ENV" \
   --from-literal=APP_DEBUG="$APP_DEBUG" \
   --from-literal=APP_URL="$APP_URL" \
