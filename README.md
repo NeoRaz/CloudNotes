@@ -208,7 +208,3 @@ minikube tunnel
 ## License
 
 This project is provided under the MIT License. See `LICENSE` for details.
-
----
-
-*If you want this appended to an existing `README.md` in the repo, tell me and I can produce the combined markdown ready to paste.*
