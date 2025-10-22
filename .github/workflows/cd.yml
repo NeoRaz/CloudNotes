@@ -125,11 +125,3 @@ jobs:
         run: |
           chmod +x ./deployment/scripts/deploy-second-step.sh
           ./deployment/scripts/deploy-second-step.sh $ENVIRONMENT
-
-      - name: 🧱 Cache Docker layers
-        uses: actions/cache@v4
-        with:
-          path: /tmp/.buildx-cache
-          key: ${{ runner.os }}-buildx-${{ github.sha }}
-          restore-keys: |
-            ${{ runner.os }}-buildx-
