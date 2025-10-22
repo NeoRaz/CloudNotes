@@ -135,6 +135,7 @@ jobs:
           done
 
           echo "✅ Running Laravel Artisan commands..."
+          echo "DEBUG: The APP_URL is '$APP_URL'"
           kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan config:clear
           kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan route:clear
           kubectl exec -n "$NAMESPACE" "$SERVER_POD" -c php-fpm -- php artisan migrate --seed --force
