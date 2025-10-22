@@ -13,11 +13,7 @@ echo "🚀 Starting first step of CloudNotes deployment ($ENVIRONMENT)..."
 # bash $SCRIPT_DIR/01-setup-minikube.sh
 
 bash $SCRIPT_DIR/02-build-server.sh "$ENVIRONMENT"
+bash $SCRIPT_DIR/03-app-key-generation.sh "$ENVIRONMENT"
 
-if [ "$ENVIRONMENT" == "local" ]; then
-    bash $SCRIPT_DIR/03-app-key-generation.sh "$ENVIRONMENT"
-else
-    echo "✅ Skipping key generation for $ENVIRONMENT environment."
-fi
 
 echo "🎉 First step completed successfully!"
