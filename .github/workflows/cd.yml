@@ -114,6 +114,12 @@ jobs:
           ENV_FILE="./deployment/envs/${ENVIRONMENT}.env"
           source "$ENV_FILE"
 
+          echo "⏳ Waiting for server pod to be ready..."
+          kubectl wait --for=condition=available --timeout=300s -n "$NAMESPACE" deployment/server
+
+          POD_NAME=$(kubectl get pods -n "$NAMESPACE" -l app=server -o jsonpath='{.items[0].metadata.name}')
+          echo "✅ Found server pod: $POD_NAME"
+
           echo "✅ Running Laravel Artisan commands..."
           kubectl exec -n "$NAMESPACE" deployment/server -c php-fpm -- php artisan config:clear
           kubectl exec -n "$NAMESPACE" deployment/server -c php-fpm -- php artisan route:clear
