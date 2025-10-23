@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'from-email' => env('MAIL_FROM_ADDRESS', 'isupport@cloudnotes.com'),
+    'from-email' => env('MAIL_FROM_ADDRESS', 'isupport@mycloudnotes.com'),
     'from-name' => env('MAIL_FROM_NAME', 'CloudNotes'),
     'view' => [
         'otp' => 'email.otp',
