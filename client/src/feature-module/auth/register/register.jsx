@@ -129,7 +129,7 @@ const Register = () => {
                                   <Alert color="danger" className="d-flex align-items-center">
                                       <p className="mb-0">
                                           Registration failed. Please check if you already have an account. Otherwise, please contact our support team at 
-                                          <a href="mailto:isupport@cloudnotes.com"> isupport@cloudnotes.com</a>
+                                          <a href="mailto:isupport@mycloudnotes.com"> isupport@mycloudnotes.com</a>
                                       </p>
                                   </Alert>
                               </div>

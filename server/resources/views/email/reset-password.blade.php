@@ -310,7 +310,7 @@
                                                                                         account, please ignore. If
                                                                                         there's an issue,
                                                                                         do not hesitate to contact us at
-                                                                                        isupport@cloudnotes.com
+                                                                                        isupport@mycloudnotes.com
                                                                                     </p>
                                                                                 </div>
                                                                                 <div></div>
