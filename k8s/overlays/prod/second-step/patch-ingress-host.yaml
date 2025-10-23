@@ -26,5 +26,5 @@ spec:
                   number: 80
   tls:
     - hosts:
-        - mycouldnotes.com
+        - mycloudnotes.com
       secretName: cloudnotes-tls-secret
