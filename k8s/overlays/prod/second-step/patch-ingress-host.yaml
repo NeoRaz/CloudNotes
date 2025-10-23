@@ -7,7 +7,24 @@ metadata:
 spec:
   ingressClassName: nginx
   rules:
-    - host: mycloudnotes.com # Change this to your desired domain e.g. cloudnotes.143.198.207.43.nip.io  for nip.io
+    - host: mycloudnotes.com
+      http:
+        paths:
+          - path: /api
+            pathType: Prefix
+            backend:
+              service:
+                name: server-nginx
+                port:
+                  number: 80
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: client
+                port:
+                  number: 80
+    - host: www.mycloudnotes.com
       http:
         paths:
           - path: /api
@@ -27,4 +44,5 @@ spec:
   tls:
     - hosts:
         - mycloudnotes.com
+        - www.mycloudnotes.com
       secretName: cloudnotes-tls-secret
