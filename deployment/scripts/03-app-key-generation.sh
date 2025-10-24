@@ -91,6 +91,7 @@ kubectl -n "$NAMESPACE" create secret generic cloudnotes-env \
   --from-literal=MAIL_ENCRYPTION="$MAIL_ENCRYPTION" \
   --from-literal=MAIL_FROM_ADDRESS="$MAIL_FROM_ADDRESS" \
   --from-literal=MAIL_FROM_NAME="$MAIL_FROM_NAME" \
+  --from-literal=BREVO_API_KEY="$BREVO_API_KEY"
 
 # 5️⃣ Restart server pods (to pick up the new secret)
 echo "🔄 Restarting server deployment to apply new environment variables..."
