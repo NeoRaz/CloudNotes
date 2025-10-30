@@ -1,6 +1,6 @@
 # CloudNotes
 
-Cloud‑Native Note Management System with CI/CD and RAG‑based Search.
+Cloud‑Native Note Management System with CI/CD and RAG‑based Search (In progress).
 
 ---
 
