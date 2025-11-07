@@ -181,7 +181,7 @@ const handleSubmit = async (values) => {
                         </div>
                       </div>
                       <div className="p-4 text-center">
-                        <p className="mb-0 ">Copyright © 2024 - Cloud Notes</p>
+                        <p className="mb-0 ">Copyright © 2025 - Cloud Notes</p>
                       </div>
                     </div>
                   </form>

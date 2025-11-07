@@ -33,7 +33,7 @@ const ResetPasswordSuccess = () => {
               </div>
             </div>
             <div className="mt-5 text-center">
-              <p className="mb-0 ">Copyright © 2024 - Cloud Notesfy</p>
+              <p className="mb-0 ">Copyright © 2025 - Cloud Notes</p>
             </div>
           </div>
         </div>
