@@ -7,7 +7,12 @@ Cloud‑Native Note Management System with CI/CD and RAG‑based Search (In prog
 ## Technical Report
 
 PDF: https://drive.google.com/file/d/162ntth6tT7vRTa-VRmwPRFAViCXanT6F/view?usp=sharing
-Deployed Version: https://mycloudnotes.com/
+
+---
+
+## Deployed Version
+
+Link: https://mycloudnotes.com/
 
 ---
 
